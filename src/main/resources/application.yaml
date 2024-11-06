@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: easistscgw
+  cloud:
+    gateway:
+      routes:
+        - id: backend_route
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/backend/**
+          filters:
+            - RewritePath=/api/backend/(?<segment>.*), /${segment}
+      httpclient:
+        connect-timeout: 5000     # 连接超时5秒
+        response-timeout: 60000   # 响应超时60秒
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+    reactor.netty.http.server: DEBUG
+
